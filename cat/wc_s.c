@@ -32,10 +32,18 @@ static void
 do_wc(FILE *f){
     int c;
     unsigned long count = 0;
+
+    int prev = '\n';
+    
     while ((c = fgetc(f)) != EOF ) {
         if (c == '\n') {
             count++;
-        }        
+        }
+        prev = c;
+    }
+    
+    if (prev != '\n') {
+        count++;
     }
     printf("%lu\n", count);
 }
