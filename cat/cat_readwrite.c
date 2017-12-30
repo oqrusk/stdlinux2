@@ -28,23 +28,17 @@ main(int argc, char *argv[])
     exit(0);
 }
 
+#define BUFFER_SIZE 2048
+
 static void
 do_cat(FILE *f){
     int c;
+    unsigned char buf[BUFFER_SIZE];
 
-    while ((c = fgetc(f)) != EOF ) {
-        int r;
-        switch (c){
-            case '\t':
-                if (fputs("\\t", stdout) == EOF) exit(1);
-                break;
-            case '\n':
-                if (fputs("$\n", stdout) == EOF) exit(1);
-                break;
-            default:
-                if (putchar(c) < 0) exit(1);
-                break;
-        }
-        
+    for(;;){
+        size_t n_read = fread(buf, 1, sizeof buf, f);
+        size_t n_written = fwrite(buf, 1, n_read, stdout);
+        if(n_written<n_read) exit(1);
+        if(n_read < sizeof buf) break;
     }
 }
