@@ -33,6 +33,18 @@ do_cat(FILE *f){
     int c;
 
     while ((c = fgetc(f)) != EOF ) {
-        if (putchar(c) < 0) exit(1);
+        int r;
+        switch (c){
+            case '\t':
+                r = printf("%s", "\\t");
+                break;
+            case '\n':
+                r = printf("$%s", "\n");
+                break;
+            default:
+                r = putchar(c);
+                break;
+        }
+        if (r < 0) exit(1);
     }
 }
